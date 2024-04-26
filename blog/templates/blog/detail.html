@@ -1,0 +1,9 @@
+
+{% for articl in article %}
+    <article>
+        <img src="{{articl.thumbnail.url}}" alt="{{articl.title}}">
+        <h1>{{articl.title}}</h1>
+        <small>{{articl.jpublish}}</small>
+        <p>{{articl.description}}</p>
+    </article>
+{% endfor %}
