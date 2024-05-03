@@ -1,9 +1,10 @@
 from django.urls import path, re_path
-from . import views
+from .views import home, detail, category
 
 app_name = "blog"
 
 urlpatterns = [
-    path('article/', views.home, name="home"),
-    path('', views.detail, name="detail")
+    path('', home, name="home"),
+    path('article/<slug:slug>', detail, name="detail"),
+    path('catefory/<slug:slug>', category , name="category")
 ]

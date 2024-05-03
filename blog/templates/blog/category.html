@@ -6,10 +6,10 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-7">
             <!-- Post preview-->
-            {% for article in articles %}
-                <div class="post-preview">        
+            {% for article in category.published %}
+                <div class="post-preview">
+                    
                     <a href="#">
-                        <!-- url 'blog:detail' article.slug -->
                         <h2 class="post-title">{{article.title}}</h2>
                         <h3 class="post-subtitle">{{article.description|truncatewords:30}}</h3>
                     </a>
@@ -18,9 +18,7 @@
                         <a href="#!">امرایی</a>
                         {{article.jpublish}}
                     </p>
-                    {% for cat in article.category_publish.all %}
-                        <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
-                    {% endfor %}
+                    
                 </div>
             {% endfor %}
             <!-- Divider-->
