@@ -1,5 +1,6 @@
 {% extends 'blog/base.html' %}
 {% load static %}
+
 {% block main %}
 
 <!-- Page Header-->
@@ -20,8 +21,8 @@
                 <a class="navbar-brand" href="{% url 'blog:home' %}">my django veblog</a>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:home' %}">خانه</a></li>
-                        {% for cat in article.category_publish.all %}
+                        <!-- <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:home' %}">خانه</a></li> -->
+                        {% for cat in category %}
                         <li class="nav-item">
                             <a href="{% url 'blog:category' cat.slug %}">{{cat.title}}</a>
                         </li>
@@ -36,10 +37,9 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-7">
             <!-- Post preview-->
-            {% for article in articles %}
+            {% for article in object_list %}
             <div class="post-preview">
                 <a href="{% url 'blog:detail' article.slug %}">
-                    <!-- url 'blog:detail' article.slug -->
                     <h2 class="post-title">{{article.title}}</h2>
                     <h3 class="post-subtitle">{{article.description|truncatewords:30}}</h3>
                 </a>
@@ -48,18 +48,27 @@
                     <a href="#!">امرایی</a>
                     {{article.jpublish}}
                 </p>
-                {% for cat in article.category_publish.all %}
+                {% for cat in article.category_published %}
                 <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
                 {% endfor %}
             </div>
-            {% endfor %}
-            <!-- Divider-->
             <hr class="my-4" />
+            {% endfor %}
 
-            <div class="d-flex justify-content-end mb-4">
-                <a class="btn btn-primary text-uppercase" href="#!">Older Posts
-                    →</a>
-            </div>
+
+            <!-- pager-->
+            {% if is_paginated %}
+                <div class="d-flex justify-content-end mb-4">
+                    {% if page_obj.has_previous %}
+                    <a class="btn btn-primary text-uppercase ml-3" href="{% url 'blog:home' article.previous_page_number %}">پست های جدید
+                        →</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a class="btn btn-primary text-uppercase" href="{% url 'blog:home' article.next_page_number %}">پست های قدیم
+                        →</a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

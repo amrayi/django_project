@@ -1,17 +1,18 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
-{% block title %} | {{article.title}}{% endblock %}
+{% block title %} | {{object.title}}{% endblock %}
 
 {% block main %}
 
 <!-- Page Header-->
-<header class="masthead" style="background-image: url('{{article.thumnail.url}}')">
+<header class="masthead" style="background-image: url('{{object.thumbnail.url}}')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="post-heading">
-                    <h1 class="text-center">{{article.title|linebreaks}}</h1>
+                    <h1 class="text-center">{{object.title|linebreaks}}</h1>
+                    <time>{{object.jpublish}}</time>
                     </span>
                 </div>
             </div>
@@ -23,7 +24,7 @@
     <div class="container">
         <div class="row gx-4 gx-lg-5 justify-content-center">
 
-            <div class="col-md-10 col-lg-8 col-xl-7">{{article.description}}</div>
+            <div class="col-md-10 col-lg-8 col-xl-7 text-justify">{{object.description}}</div>
         </div>
     </div>
 </article>

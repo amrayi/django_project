@@ -1,26 +1,58 @@
+from typing import Any
+from django.views.generic import ListView, DetailView
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+# from django.http import HttpResponse, JsonResponse
 from .models import Article, Category
 
 # Create your views here.
-def home(request):
-    context = {
-        "articles" : Article.objects.published(),
-        "category" : Category.objects.filter(status= True)
-    }
-    return render(request, "blog/home.html", context)
+# def home(request, page =1):
+#     article_list = Article.objects.published()
+#     paginator = Paginator(article_list, 6)
+#     articles = paginator.get_page(page)
+#     context = {
+#         "articles" : articles,
+#         "category" : Category.objects.filter(status= True)
+#     }
+#     return render(request, "blog/home.html", context)
+class ArticleList(ListView):
+    queryset = Article.objects.published()
+    paginate_by = 6
+    
 
-def detail(request, slug):
-    context = {
-        "article": get_object_or_404(Article.objects.published(), slug=slug),
-        "category" : Category.objects.filter(status= True)
-    }
-    return render(request, "blog/detail.html", context)
-
-def category(request, slug):
-    context = {
-        "category": get_object_or_404(Category.objects.published(), slug=slug)
-    }
-    return render(request, "blog/category.html", context)
+# def detail(request, slug):
+#     context = {
+#         "article": get_object_or_404(Article.objects.published(), slug=slug),
+#         "category" : Category.objects.filter(status= True)
+#     }
+#     return render(request, "blog/detail.html", context)
+class ArticleDetail(DetailView):
+    def get_object(self):
+        slug = self.kwargs.get('slug')
+        return get_object_or_404(Article.objects.published(), slug=slug)
 
 
+# def category(request, slug, page=1):
+#     category = get_object_or_404(Category, slug=slug, status=True)
+#     article_list = category.articles.published()
+#     paginator = Paginator(article_list, 6)
+#     articles = paginator.get_page(page)
+#     context = {
+#         "category": category,
+#         "article" : articles
+#     }
+#     return render(request, "blog/category.html", context)
+class CategoryList(ListView):
+    paginate_by = 6
+    template_name = 'blog/category_list.html'
+
+    def get_queryset(self):
+        global category
+        slug = self.kwargs.get('slug')
+        category = get_object_or_404(Category.objects.active(), slug=slug)
+        return category.articles.published()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        return context
