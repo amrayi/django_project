@@ -1,76 +1,11 @@
-{% extends 'blog/base.html' %}
-{% load static %}
+{% extends 'blog/list.html' %}
 
-{% block main %}
+{% block header %}{% endblock %}
 
-<!-- Page Header-->
-<header class="masthead" style="background-image: url('{% static "blog/assets/img/home-bg.jpg" %}')">
-    <div class="container position-relative px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="site-heading">
-                    <h1>امرایی</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- Navigation-->
-        <nav class="navbar-nav navbar-expand-lg navbar-light" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'blog:home' %}">my django veblog</a>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <!-- <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog:home' %}">خانه</a></li> -->
-                        {% for cat in category %}
-                        <li class="nav-item">
-                            <a href="{% url 'blog:category' cat.slug %}">{{cat.title}}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        
-        <!-- Main Content-->
-<div class="container px-4 px-lg-5">
-    <div class="row gx-4 gx-lg-5 justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-7">
-            <!-- Post preview-->
-            {% for article in object_list %}
-            <div class="post-preview">
-                <a href="{% url 'blog:detail' article.slug %}">
-                    <h2 class="post-title">{{article.title}}</h2>
-                    <h3 class="post-subtitle">{{article.description|truncatewords:30}}</h3>
-                </a>
-                <p class="post-meta">
-                    نوشته شده توسط
-                    <a href="#!">امرایی</a>
-                    {{article.jpublish}}
-                </p>
-                {% for cat in article.category_published %}
-                <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
-                {% endfor %}
-            </div>
-            <hr class="my-4" />
-            {% endfor %}
+{% block pervious_page_url %}
+    {% url 'blog:home' page_obj.previous_page_number %}
+{% endblock %}
 
-
-            <!-- pager-->
-            {% if is_paginated %}
-                <div class="d-flex justify-content-end mb-4">
-                    {% if page_obj.has_previous %}
-                    <a class="btn btn-primary text-uppercase ml-3" href="{% url 'blog:home' article.previous_page_number %}">پست های جدید
-                        →</a>
-                    {% endif %}
-                    {% if page_obj.has_next %}
-                    <a class="btn btn-primary text-uppercase" href="{% url 'blog:home' article.next_page_number %}">پست های قدیم
-                        →</a>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
+{% block next_page_url %}
+    {% url 'blog:home' page_obj.next_page_number %}
 {% endblock %}

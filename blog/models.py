@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 from django.utils import timezone
 from extensions.utils import jalali_converter
 
@@ -18,7 +19,7 @@ class Category(models.Model):
     status = models.BooleanField(default= True, verbose_name="آیا نمایش داده شود")
     position = models.IntegerField(verbose_name= "پوزیشن")
 
-    # class Meta:
+    # class Meta():
     #     verbose_name = "دسته بندی"
     #     verbose_name_plural = "دسته بندی ها"
     #     oedering = ['parent','position']
@@ -44,7 +45,7 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name ="")
     status = models.CharField(max_length= 1, choices=STATUS_CHOICES, verbose_name ="وضعیت")
 
-    # class Meta:
+    # class Meta():
     #     verbose_name = "مقاله"
     #     verbose_nameـplural = "مقالات"
 
@@ -56,7 +57,11 @@ class Article(models.Model):
 
     jpublish.short_description = "زمان امروز"
 
-    def category_published(self):
-        return self.category.filter(status = True)
-
+    # def category_published(self):
+    #     return self.category.filter(status = True)
+    
+    def thumbnail_tag(self):
+        return format_html("<img width=100 height= 75 style= 'border-radius: 5px' src='{}'>".format(self.thumnale.url))
+    thumbnail_tag.short_description = "عکس"
+    
     objects = ArticleManager()

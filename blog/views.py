@@ -6,15 +6,15 @@ from django.shortcuts import render, get_object_or_404
 from .models import Article, Category
 
 # Create your views here.
-# def home(request, page =1):
-#     article_list = Article.objects.published()
-#     paginator = Paginator(article_list, 6)
-#     articles = paginator.get_page(page)
-#     context = {
-#         "articles" : articles,
-#         "category" : Category.objects.filter(status= True)
-#     }
-#     return render(request, "blog/home.html", context)
+def home(request, page =1):
+    article_list = Article.objects.published()
+    paginator = Paginator(article_list, 6)
+    articles = paginator.get_page(page)
+    context = {
+        "articles" : articles,
+        "category" : Category.objects.filter(status= True)
+    }
+    return render(request, "blog/home.html", context)
 class ArticleList(ListView):
     queryset = Article.objects.published()
     paginate_by = 6
