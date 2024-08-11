@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.urls import reverse
+from account.models import User
 from django.utils.html import format_html
 from django.utils import timezone
 from extensions.utils import jalali_converter
+from django.contrib.contenttypes.fields import GenericRelation
+from comment.models import Comment
 
 # my manager
 class ArticleManager(models.Manager):
@@ -35,6 +38,8 @@ class Article(models.Model):
     STATUS_CHOICES = {
         ('d', 'پیش نویس'),
         ('p', 'منتتشر شده'),
+        ('i', 'در حال بررسی'),
+        ('b', 'برگشت داده شده'),
     }
     author = models.ForeignKey(User, null=True, on_delete= models.SET_NULL, related_name='articles', verbose_name= 'نویسنده')
     title = models.CharField(max_length= 200, verbose_name ="عنوان مقاله")
@@ -45,7 +50,9 @@ class Article(models.Model):
     publish = models.DateTimeField(default= timezone.now, verbose_name ="زمان انتشار")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, verbose_name ="")
+    is_special = models.BooleanField(default= False, verbose_name="مقاله ویژه")
     status = models.CharField(max_length= 1, choices=STATUS_CHOICES, verbose_name ="وضعیت")
+    comments = GenericRelation(Comment)
 
     # class Meta():
     #     verbose_name = "مقاله"
@@ -54,6 +61,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("account:home")
+    
     def jpublish(self):
         return jalali_converter(self.publish)
 
@@ -65,5 +75,9 @@ class Article(models.Model):
     def thumbnail_tag(self):
         return format_html("<img width=100 height= 75 style= 'border-radius: 5px' src='{}'>".format(self.thumnale.url))
     thumbnail_tag.short_description = "عکس"
+    
+    def category_to_str(self):
+        return ", ".join([category.title for category in self.category.active()])
+    category_to_str.short_description = "دسته بندی"
     
     objects = ArticleManager()
