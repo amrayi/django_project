@@ -1,4 +1,5 @@
 from typing import Any
+from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
@@ -55,4 +56,20 @@ class CategoryList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = category
+        return context
+
+
+class AuthorList(ListView):
+    paginate_by = 6
+    template_name = 'blog/auther_list.html'
+
+    def get_queryset(self):
+        global author
+        username = self.kwargs.get('slug')
+        author = get_object_or_404(User.objects.active(), username=username)
+        return author.articles.published()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = author
         return context
