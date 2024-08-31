@@ -1,13 +1,15 @@
 {% extends 'registration/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}{% block title-meta %}
-پروفایل کاربری
-{% endblock %}{% endblock %}
+<h2 style="font-family: B Yekan;">
+    {% block title %}{% block title-meta %}
+        پروفایل کاربری
+    {% endblock %}{% endblock %}
+</h2>
 
 {% block main %}
 <div class="col-md-12">
-    <div class="card card-primary">
+    <div class="card card-primary" style="font-family: Sahel;">
         <div class="card-header">
             <h3 class="card-title mb-0 float-left">پروفایل</h3>
         </div>
@@ -22,7 +24,7 @@
                     </div>
                     <div class="col-12">
                         <label class="my-4">گذرواژه:</label>
-                        <span>برای تغییر گذرواژه <a href="{% url 'password_change' %}">کلیک</a>کنید.</span>
+                        <span>برای تغییر گذرواژه <a href="{% url 'password_change' %}">کلیک</a> کنید.</span>
                     </div>
                     <div class="col-6">
                         {{ form.first_name|as_crispy_field }}
@@ -31,10 +33,13 @@
                         {{ form.last_name|as_crispy_field }}
                     </div>
                     <div class="col-6">
+                        {{ form.phone_number|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
                         {{ form.special_user|as_crispy_field }}
                     </div>
                     <div class="col-6">
-                        {{ form.is_author|as_crispy_field }}
+                        {{ form.is_auther|as_crispy_field }}
                     </div>
                 </div>
                 <button class="btn btn-success">ویرایش اطلاعات</button>

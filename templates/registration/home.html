@@ -1,14 +1,17 @@
 {% extends 'registration/base.html' %}
 
-{% block title %}{% block title-meta %}
-لیست مقالات
-{% endblock %}{% endblock %}
+<h2 style="font-family: B Yekan;">
+    {% block title %}{% block title-meta %}
+        لیست مقالات
+    {% endblock %}{% endblock %}
+</h2>
+
 
 {% block main %}
 <div class="row">
     <div class="col-12">
         {% if object_list %}
-            <div class="card">
+            <div class="card" style="font-family: Sahel;">
                 <div class="card-body table-responsive p-0">
                     <table class="table table-head-fixed">
                         <thead>

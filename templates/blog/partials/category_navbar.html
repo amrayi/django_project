@@ -1,3 +1,6 @@
+{% extends 'blog/base.html' %}
+
+{% block category_navbar %}
 <div class="collapse navbar-collapse" id="navbarResponsive">
     <ul class="navbar-nav ms-auto py-4 py-lg-0">
         {% for cat in category %}
@@ -13,3 +16,5 @@
         <!-- {%  category_navbar %} -->
     </ul>
 </div>
+
+{% endblock %}

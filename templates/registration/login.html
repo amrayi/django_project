@@ -7,26 +7,26 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="{ % static 'registration/login/images/icons/favicon.ico' %}"/>
+	<link rel="icon" type="image/png" href="{% static 'registration/login/images/icons/favicon.ico' %}"/>
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/bootstrap/css/bootstrap.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/fonts/iconic/css/material-design-iconic-font.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/fonts/iconic/css/material-design-iconic-font.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/animate/animate.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/animate/animate.css' %}">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/css-hamburgers/hamburgers.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/css-hamburgers/hamburgers.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/animsition/css/animsition.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/animsition/css/animsition.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/select2/select2.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/select2/select2.min.css' %}">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/vendor/daterangepicker/daterangepicker.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/vendor/daterangepicker/daterangepicker.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/css/util.css' %}">
-	<link rel="stylesheet" type="text/css" href="{ % static 'registration/login/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'registration/login/css/main.css' %}">
 <!--===============================================================================================-->
 </head>
 <body>
@@ -35,7 +35,7 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<form class="login100-form validate-form" method="post">{% csrf_token %}
-					<span class="login100-form-title p-b-26 myfont">
+					<span class="login100-form-title p-b-26" style="font-family: Sahel;">
 						ورود به سایت
 					</span>
 					<span class="login100-form-title p-b-48">
@@ -66,12 +66,13 @@
 						{% endif %}
 
 					</div>
-					<a class="myfont" href="{% url 'password_reset' %}">فراموشی رمز عبور</a>
-					<a class="myfont" href="{% url 'register' %}">ثبت نام کنید</a>
+					<a  style="font-family: Sahel;" href="{% url 'password_reset' %}">فراموشی رمز عبور</a>
+					<p></p>
+					<a  style="font-family: Sahel;" href="{% url 'register' %}">ثبت نام کنید</a>
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn myfont">
+							<button class="login100-form-btn"  style="font-family: Sahel;">
 								ورود
 							</button>
 						</div>

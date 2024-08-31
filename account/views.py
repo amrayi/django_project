@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, PasswordChangeView
-from .models import User
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+from config import settings
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from .models import User, VerificationCode
 from .mixins import FieldsMixin, FormValidMixin, AuthorAccessMixin, SuperUserAccessMixin, AuthorAccessMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from blog.models import Article
@@ -34,7 +37,7 @@ class ArticleDelete(SuperUserAccessMixin, DeleteView):
 class Profile(LoginRequiredMixin, UpdateView):
     model = User
     template_name = "registration/profile.html"
-    fields = ['username', 'email', 'first_name', 'last_name', 'special_user', 'is_auther']
+    fields = ['username', 'email', 'first_name', 'last_name', 'phone_number', 'special_user', 'is_auther']
     success_url = reverse_lazy('account:profile')
     
     def get_object(self):
@@ -55,53 +58,107 @@ class Login(LoginView):
             return reverse_lazy('account:home')
         else:
             return reverse_lazy('account:profile')
-    
-# class PasswordChange(PasswordChangeView):
-#     success_url = reverse_lazy("account:password_change_done")
+        
+class Logout(LogoutView):
+    def get(self, request):
+        logout(request)
+        # return HttpResponseRedirect(settings.LOGIN_URL)
+        return reverse_lazy('account:logout')
 
 
 from django.http import HttpResponse
 from .forms import SignupForm
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_str, force_bytes 
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from django.core.mail import EmailMessage
+from account.models import User
+from zeep import Client
+from django.shortcuts import render, redirect
+from .utils import send_sms
+import random
 
-class Register(CreateView):
-    form_class = SignupForm
-    template_name = "registration/register.html"
+# class Register(CreateView):
+#     form_class = SignupForm
+#     template_name = "registration/register.html"
     
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user.is_active = False
-        user.save()
-        current_site = get_current_site(self.request)
-        mail_subject = 'فعال سازی اکانت'
-        message = render_to_string('registration/activate_account.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-            'token':account_activation_token.make_token(user),
-        })
-        to_email = form.cleaned_data.get('email')
-        email = EmailMessage(
-                    mail_subject, message, to=[to_email]
-        )
-        email.send()
-        return HttpResponse('لینک فعال سازی به ایمیل شما ارسال شد. <a href= "/login">ورود<a>')
+#     def form_valid(self, form):
+#         user = form.save(commit=False)
+#         user.is_active = False
+#         user.save()
+        
+#         send_verification_code()
+        
+#         # uid = urlsafe_base64_decode(force_bytes(user.pk))
+#         # token = account_activation_token.make_token(user)
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        # return redirect('home')
-        return HttpResponse('اکانت شما با موفقیت فعال شد. برای ورود <a href="/login">کلیک<a> کنید.')
+
+# def activate(request, uidb64, token):
+#     try:
+#         uid = force_str(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+#     if user is not None and account_activation_token.check_token(user, token):
+#         user.is_active = True
+#         user.save()
+#         # return redirect('home')
+#         return HttpResponse('اکانت شما با موفقیت فعال شد. برای ورود <a href="/login">کلیک<a> کنید.')
+#     else:
+#         return HttpResponse('لینک فعال سازی منقضی شده است. <a href="/registration">دوباره امتحان کنید.<a>')
+    
+USERNAME = 'realamra'
+PASSWORD = 'Amir@1234'
+
+def send_verification_code(phone_number, code):
+    client = Client('https://api.payamak-panel.com/post/Send.asmx?wsdl')
+    client.service.SendSimpleSMS2(
+        Username=USERNAME,
+        Password=PASSWORD,
+        MobileNumber=phone_number,
+        Message=f'کد تایید شما: {code}',
+        LineNumber='09190027944'
+    )
+
+def register(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            phone_number = form.cleaned_data['phone_number']
+            
+            verification_code = random.randint(100000, 999999)
+            
+            request.session['phone_number'] = phone_number
+            request.session['verification_code'] = verification_code
+            send_verification_code(phone_number, verification_code)
+            
+            return redirect('verify')
     else:
-        return HttpResponse('لینک فعال سازی منقضی شده است. <a href="/registration">دوباره امتحان کنید.<a>')
+        form = SignupForm()
+    
+    return render(request, 'registration/register.html', {'form': form})
+
+
+def verify(request):
+    if request.method == 'POST':
+        entered_code = request.POST.get('code')
+        verification_code = request.session.get('verification_code')
+        
+        if entered_code == str(verification_code):
+            phone_number = request.session.get('phone_number')
+            
+            return HttpResponse('اکانت شما با موفقیت فعال شد. برای ورود <a href="/login">کلیک<a> کنید.')
+        else:
+            return HttpResponse('لینک فعال سازی منقضی شده است. <a href="/registration">دوباره امتحان کنید.<a>')
+    
+    return render(request, 'registration/register_confirm.html')
+
+
+
+# def send_verification_code(request):
+#     api_key = 'your_api_key'
+#     secret_key = 'your_secret_key'
+#     phone_number = f'0{User.phone_number}'
+#     verification_code = random.randint(10000, 99999)
+#     message = f'کد تایید شما: {verification_code}'
+
+#     response = send_sms(api_key, secret_key, phone_number, message)
+#     return render(request, 'register_complite.html', {'response': response})
+

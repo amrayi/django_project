@@ -1,5 +1,7 @@
-{% autoescape off %}
-سلام {{ user.username }},
-برای فعال سازی اکانت خود بر روی این لینک کلیک کنید,
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
-{% endautoescape %}
+<div dir="rtl" style="font-family: Sahel;">
+    {% autoescape off %}
+    <h4>سلام {{ user.username }}</h4>
+    <p>برای فعال سازی اکانت خود بر روی این لینک کلیک کنید</p>
+    http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+    {% endautoescape %}
+</div>

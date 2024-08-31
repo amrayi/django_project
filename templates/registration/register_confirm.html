@@ -1,10 +1,10 @@
 {% load static %}
-
+{% load widget_tweaks %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ثبت نام</title>
+	<title>بازیابی رمز عبور</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -34,76 +34,36 @@
 <body>
 	
 	<div class="limiter">
+        {% if form.non_field_errors %}
+            <div class="myerror">
+                {{form.non_field_error.as_text}}
+            </div>
+        {% endif %}
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form" method="POST">{% csrf_token %}
-					<span class="login100-form-title p-b-26 myfont">
-						ثبت نام در سایت
+				<form class="login100-form validate-form" method="post">{% csrf_token %}
+                    <span class="login100-form-title p-b-26 myfont">
+						احراز هویت
 					</span>
 					<span class="login100-form-title p-b-48">
 						<i class="zmdi zmdi-font"></i>
 					</span>
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+                    <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
 						{{form.username}}
-						<span class="focus-input100" data-placeholder="نام کاربری"></span>
-						{% if form.username.errorr %}
+						<span class="focus-input100" data-placeholder="کد تایید"></span>
+						{% if form. %}
 							<div class="myerror">
-								{{form.username.errorr}}
+								{{form.}}
 							</div>
 						{% endif %}
 					</div>
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						{{form.email}}
-						<span class="focus-input100" data-placeholder="ایمیل"></span>
-						{% if form.email.errorr %}
-							<div class="myerror">
-								{{form.email.errorr}}
-							</div>
-						{% endif %}
-					</div>
-					<div class="wrap-input100 validate-input" data-validate = "Enter phone number">
-						{{form.phone_number}}
-						<span class="focus-input100" data-placeholder="شماره تلفن"></span>
-						{% if form.phone_number.errorr %}
-							<div class="myerror">
-								{{form.phone_number.errorr}}
-							</div>
-						{% endif %}
-					</div>
-
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-						{{form.password1}}
-						<span class="focus-input100" data-placeholder="گذرواژه"></span>
-						{% if form.password1.errorr %}
-							<div class="myerror">
-								{{form.password1.errorr}}
-							</div>
-						{% endif %}
-					</div>
-
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-						{{form.password2}}
-						<span class="focus-input100" data-placeholder="تایید گذرواژه"></span>
-						{% if form.password2.errorr %}
-							<div class="myerror">
-								{{form.password2.errorr}}
-							</div>
-						{% endif %}
-					</div>
-
-					حسابی دارید؟ <a class="myfont" href="{% url 'password_reset' %}">وارد شوید</a>
+                    <a class="myfont" href="{% url 'register' %}">ارسال دوباره رمز یکبار مصرف</a>
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn myfont">
-								ثبت نام
+                            <button class="login100-form-btn myfont">
+								تایید
 							</button>
 						</div>
 					</div>
@@ -122,7 +82,7 @@
 <!--===============================================================================================-->
 	<script src="{% static 'registration/login/vendor/bootstrap/js/popper.js' %}"></script>
 	<script src="{% static 'registration/login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<!--==============================================================================================-->
+<!--===============================================================================================-->
 	<script src="{% static 'registration/login/vendor/select2/select2.min.js' %}"></script>
 <!--===============================================================================================-->
 	<script src="{% static 'registration/login/vendor/daterangepicker/moment.min.js' %}"></script>

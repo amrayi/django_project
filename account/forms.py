@@ -17,12 +17,12 @@ class ProfileForm(forms.ModelForm):
             
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'special_user', 'is_auther']
+        fields = ['username', 'email', 'first_name', 'last_name', 'phone_number', 'special_user', 'is_auther']
         
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField(max_length=200)
+    phone_number = forms.CharField(max_length=11, label='Phone Number')
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'phone_number', 'password1', 'password2')
