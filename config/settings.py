@@ -125,10 +125,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -151,7 +151,7 @@ EMAIL_USE_TLS = True
 # SECRET_KEY = config('SECRET_KEY')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEBUG = True
+DEBUG = False
 SECRET_KEY = 'django-insecure-!!oa4(ug-_mlwnny#)u5ltq=y5562=&=ogk=e0gtygdd$xhfub'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
