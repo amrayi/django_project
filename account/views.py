@@ -89,7 +89,6 @@ import random
 #         # uid = urlsafe_base64_decode(force_bytes(user.pk))
 #         # token = account_activation_token.make_token(user)
 
-
 # def activate(request, uidb64, token):
 #     try:
 #         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -149,16 +148,4 @@ def verify(request):
             return HttpResponse('لینک فعال سازی منقضی شده است. <a href="/registration">دوباره امتحان کنید.<a>')
     
     return render(request, 'registration/register_confirm.html')
-
-
-
-# def send_verification_code(request):
-#     api_key = 'your_api_key'
-#     secret_key = 'your_secret_key'
-#     phone_number = f'0{User.phone_number}'
-#     verification_code = random.randint(10000, 99999)
-#     message = f'کد تایید شما: {verification_code}'
-
-#     response = send_sms(api_key, secret_key, phone_number, message)
-#     return render(request, 'register_complite.html', {'response': response})
 
